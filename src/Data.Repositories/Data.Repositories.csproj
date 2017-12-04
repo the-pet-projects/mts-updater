@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>PetProjects.MicroTransactionsUpdater.Data.Repositories</AssemblyName>
+    <RootNamespace>PetProjects.MicroTransactionsUpdater.Data.Repositories</RootNamespace>
+  </PropertyGroup>
+
+</Project>

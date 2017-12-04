@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>PetProjects.MicroTransactionsUpdater.Application.Consumers</AssemblyName>
+    <RootNamespace>PetProjects.MicroTransactionsUpdater.Application.Consumers</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PetProjects.Framework.Kafka" Version="0.1.17338.1" />
+    <PackageReference Include="PetProjects.Framework.Logging.Consumer" Version="0.9.17335.1" />
+    <PackageReference Include="PetProjects.MicroTransactions.Events" Version="0.1.17338.3" />
+  </ItemGroup>
+
+</Project>
