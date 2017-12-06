@@ -3,7 +3,7 @@
     using PetProjects.MicroTransactions.Events.Transactions.V1;
     using PetProjects.MicroTransactionsUpdater.Domain.Model;
 
-    internal static class TransactionMappings
+    public static class TransactionMappings
     {
         public static Transaction ToDomainModel(this TransactionCreated transaction)
         {

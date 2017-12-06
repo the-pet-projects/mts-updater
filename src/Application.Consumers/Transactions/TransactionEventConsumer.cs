@@ -4,7 +4,6 @@
     using Microsoft.Extensions.Logging;
     using PetProjects.Framework.Kafka.Configurations.Consumer;
     using PetProjects.Framework.Kafka.Consumer;
-    using PetProjects.Framework.Kafka.Contracts.Topics;
     using PetProjects.MicroTransactions.Events.Transactions.V1;
     using PetProjects.MicroTransactionsUpdater.Application.Consumers.Mappings;
     using PetProjects.MicroTransactionsUpdater.Data.Repositories;
@@ -14,7 +13,7 @@
         private readonly ILogger logger;
         private readonly ITransactionsRepository repo;
 
-        public TransactionEventConsumer(ITopic<TransactionEvent> topic, IConsumerConfiguration configuration, ILogger logger, ITransactionsRepository repo) : base(topic, configuration)
+        public TransactionEventConsumer(IConsumerConfiguration configuration, ILogger logger, ITransactionsRepository repo) : base(new TransactionEventsTopic(), configuration)
         {
             this.logger = logger;
             this.repo = repo;

@@ -10,9 +10,11 @@
     using Microsoft.Extensions.Logging.Abstractions;
     using PetProjects.Framework.Consul;
     using PetProjects.Framework.Consul.Store;
+    using PetProjects.Framework.Kafka.Consumer;
     using PetProjects.Framework.Logging.Producer;
+    using PetProjects.MicroTransactions.Events.Transactions.V1;
+    using PetProjects.MicroTransactionsUpdater.Infrastructure.Configuration;
     using Serilog.Events;
-    using KafkaConfiguration = PetProjects.MicroTransactionsUpdater.Presentation.ConsoleApplication.Configuration.KafkaConfiguration;
 
     public class Program
     {
@@ -63,14 +65,8 @@
             Program.SetupLogging(serviceCollection, configStore);
 
             serviceCollection.AddPetProjectConsulServices(Program.Configuration, true);
-            serviceCollection.AddTransient<KafkaConfiguration>(sp =>
-            {
-                var store = sp.GetRequiredService<IStringKeyValueStore>();
-                return new KafkaConfiguration
-                {
-                    Brokers = store.GetAndConvertValue<string>("ApplicationKafkaConfiguration/Brokers").Split(',')
-                };
-            });
+
+            serviceCollection.SetupDependencies();
         }
 
         private static void SetupLogging(IServiceCollection serviceCollection, IStringKeyValueStore configStore)
@@ -98,16 +94,26 @@
             var logger = scopedProvider.GetService<ILoggerFactory>().CreateLogger<Program>();
 
             logger.LogCritical("Starting MicroTransactionsUpdater...");
-            
-            Console.CancelKeyPress += (sender, eArgs) =>
+
+            using (var consumer = scopedProvider.GetRequiredService<IConsumer<TransactionEvent>>())
             {
-                Program.QuitEvent.Set();
-                eArgs.Cancel = true;
-            };
+                var task = Task.Factory.StartNew(() => consumer.StartConsuming(), TaskCreationOptions.LongRunning);
 
-            Program.QuitEvent.WaitOne();
+                Console.CancelKeyPress += (sender, eArgs) =>
+                {
+                    Program.QuitEvent.Set();
+                    eArgs.Cancel = true;
+                };
 
-            logger.LogCritical("LogAggregator MicroTransactionsUpdater...");
+                Program.QuitEvent.WaitOne();
+
+                logger.LogWarning("Received signal to exit. Stopping and disposing consumer...");
+
+                consumer.Dispose(); // TODO
+                task.Wait();
+            }
+
+            logger.LogCritical("Stopping MicroTransactionsUpdater...");
 
             // wait 2 seconds for previous log to reach the sink
             Task.Delay(TimeSpan.FromMilliseconds(2000)).Wait();

@@ -1,13 +1,9 @@
 ﻿namespace PetProjects.MicroTransactionsUpdater.Data.Repositories
 {
-    using System.Collections.Generic;
+    using Cassandra;
 
     public class CassandraSettings
     {
-        public string ContactPoints { get; set; }
-
-        public string Keyspace { get; set; }
-
-        public Dictionary<string, string> ReplicationParameters { get; set; }
+        public ConsistencyLevel TransactionsWriteConsistencyLevel { get; set; }
     }
 }

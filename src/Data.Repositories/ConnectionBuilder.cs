@@ -7,17 +7,17 @@
 
     public static class ConnectionBuilder
     {
-        public static IConnection BuildConnection(CassandraSettings settings)
+        public static IConnection BuildConnection(CassandraConfiguration config)
         {
             var cluster = Cluster.Builder()
-                .WithDefaultKeyspace(settings.Keyspace)
-                .AddContactPoints(settings.ContactPoints.Split(','))
+                .WithDefaultKeyspace(config.Keyspace)
+                .AddContactPoints(config.ContactPoints)
                 .Build();
 
             var mapConfig = new MappingConfiguration();
             mapConfig.Define<TransactionMappings>();
 
-            var session = cluster.ConnectAndCreateDefaultKeyspaceIfNotExists(settings.ReplicationParameters);
+            var session = cluster.ConnectAndCreateDefaultKeyspaceIfNotExists(config.ReplicationParameters);
 
             var table = new Table<Transaction>(session, mapConfig);
             table.CreateIfNotExists();
