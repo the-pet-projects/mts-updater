@@ -14,7 +14,7 @@ namespace PetProjects.MicroTransactionsUpdater.Application.Consumers.Tests.Trans
     public class TransactionEventConsumerTests
     {
         private readonly Mock<IConsumerConfiguration> consumerConfigMock = new Mock<IConsumerConfiguration>();
-        private readonly Mock<ILogger> loggerMock = new Mock<ILogger>();
+        private readonly Mock<ILogger<TransactionEventConsumerProxy>> loggerMock = new Mock<ILogger<TransactionEventConsumerProxy>>();
         private readonly Mock<ITransactionsRepository> repoMock = new Mock<ITransactionsRepository>();
 
         private readonly TransactionEventConsumerProxy target;

@@ -11,7 +11,7 @@
     {
         private readonly ITransactionsRepository repo;
 
-        public TransactionEventConsumer(IConsumerConfiguration configuration, ILogger logger, ITransactionsRepository repo) : base(new TransactionEventsTopic(), configuration, logger, true)
+        public TransactionEventConsumer(IConsumerConfiguration configuration, ILogger<TransactionEventConsumer> logger, ITransactionsRepository repo) : base(new TransactionEventsTopic(), configuration, logger, true)
         {
             this.repo = repo;
             this.Receive<TransactionCreated>(this.Handle);

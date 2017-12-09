@@ -7,9 +7,9 @@
     using PetProjects.MicroTransactionsUpdater.Application.Consumers.Transactions;
     using PetProjects.MicroTransactionsUpdater.Data.Repositories;
 
-    internal class TransactionEventConsumerProxy : TransactionEventConsumer
+    public class TransactionEventConsumerProxy : TransactionEventConsumer
     {
-        public TransactionEventConsumerProxy(IConsumerConfiguration configuration, ILogger logger, ITransactionsRepository repo) : base(configuration, logger, repo)
+        public TransactionEventConsumerProxy(IConsumerConfiguration configuration, ILogger<TransactionEventConsumerProxy> logger, ITransactionsRepository repo) : base(configuration, logger, repo)
         {
         }
 
