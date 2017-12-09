@@ -41,8 +41,10 @@
                 {
                     await Task.Delay(DelayBetweenAssertRetries).ConfigureAwait(false);
                 }
+
                 retries++;
-            } while (retries < NumberOfAssertRetries);
+            }
+            while (retries < NumberOfAssertRetries);
 
             Assert.Fail("Maximum number of assertion retries reached.");
             return default(T);

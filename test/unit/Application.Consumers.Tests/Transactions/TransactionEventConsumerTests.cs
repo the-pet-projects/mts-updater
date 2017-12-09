@@ -6,7 +6,6 @@ namespace PetProjects.MicroTransactionsUpdater.Application.Consumers.Tests.Trans
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Moq;
     using PetProjects.Framework.Kafka.Configurations.Consumer;
-    using PetProjects.Framework.Kafka.Contracts.Topics;
     using PetProjects.MicroTransactions.Events.Transactions.V1;
     using PetProjects.MicroTransactionsUpdater.Data.Repositories;
     using PetProjects.MicroTransactionsUpdater.Domain.Model;
@@ -14,9 +13,9 @@ namespace PetProjects.MicroTransactionsUpdater.Application.Consumers.Tests.Trans
     [TestClass]
     public class TransactionEventConsumerTests
     {
-        private Mock<IConsumerConfiguration> consumerConfigMock = new Mock<IConsumerConfiguration>();
-        private Mock<ILogger> loggerMock = new Mock<ILogger>();
-        private Mock<ITransactionsRepository> repoMock = new Mock<ITransactionsRepository>();
+        private readonly Mock<IConsumerConfiguration> consumerConfigMock = new Mock<IConsumerConfiguration>();
+        private readonly Mock<ILogger> loggerMock = new Mock<ILogger>();
+        private readonly Mock<ITransactionsRepository> repoMock = new Mock<ITransactionsRepository>();
 
         private readonly TransactionEventConsumerProxy target;
 
@@ -26,7 +25,6 @@ namespace PetProjects.MicroTransactionsUpdater.Application.Consumers.Tests.Trans
             this.target = new TransactionEventConsumerProxy(this.consumerConfigMock.Object, this.loggerMock.Object, this.repoMock.Object);
         }
 
-        [Ignore]
         [TestMethod]
         public void Handle_ValidEvent_CallsAddAsync()
         {

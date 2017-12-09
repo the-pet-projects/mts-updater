@@ -1,19 +1,25 @@
 ﻿namespace IntegrationTests
 {
+    using System;
     using Cassandra;
 
     internal static class CassandraConnection
     {
-        public static ISession Session { get; } = BuildSession();
+        private static readonly Lazy<ISession> LazySession = BuildSession();
 
-        private static ISession BuildSession()
+        public static ISession Session => LazySession.Value;
+
+        private static Lazy<ISession> BuildSession()
         {
-            var cluster = Cluster.Builder()
-                .AddContactPoints(AppSettings.Current.CassandraContactPoints)
-                .WithDefaultKeyspace(AppSettings.Current.CassandraKeyspace)
-                .Build();
+            return new Lazy<ISession>(() =>
+            {
+                var cluster = Cluster.Builder()
+                    .AddContactPoints(AppSettings.Current.CassandraContactPoints)
+                    .WithDefaultKeyspace(AppSettings.Current.CassandraKeyspace)
+                    .Build();
 
-            return cluster.Connect();
+                return cluster.Connect();
+            });
         }
     }
 }

@@ -71,7 +71,7 @@
 
         private static void SetupLogging(IServiceCollection serviceCollection, IStringKeyValueStore configStore)
         {
-            var kafkaConfig = new Framework.Logging.Producer.KafkaConfiguration
+            var kafkaConfig = new KafkaConfiguration
             {
                 Brokers = configStore.GetAndConvertValue<string>("Logging/KafkaConfiguration/Brokers").Split(','),
                 Topic = configStore.GetAndConvertValue<string>("Logging/KafkaConfiguration/Topic")

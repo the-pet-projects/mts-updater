@@ -1,10 +1,8 @@
 ﻿namespace IntegrationTests
 {
-    using System;
     using System.Collections.Generic;
 
     using System.IO;
-    using System.Linq;
     using System.Reflection;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -16,16 +14,6 @@
 
     public class AppSettings
     {
-        public string KafkaBrokers { get; set; }
-
-        public string CassandraContactPoints { get; set; }
-
-        public string CassandraKeyspace { get; set; }
-
-        public static AppSettings Current;
-
-        public static IConfiguration Configuration;
-
         static AppSettings()
         {
             var assembly = typeof(AssemblyInitialize).GetTypeInfo().Assembly;
@@ -40,7 +28,7 @@
                     .AddEnvironmentVariables("MTS_APP_SETTINGS_");
                 AppSettings.Configuration = builder.Build();
             }
-            
+
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddSingleton<ILoggerFactory>(NullLoggerFactory.Instance);
             serviceCollection.AddSingleton<ILoggerProvider>(NullLoggerProvider.Instance);
@@ -49,7 +37,7 @@
             serviceCollection.AddPetProjectConsulServices(AppSettings.Configuration, true);
             using (var provider = serviceCollection.BuildServiceProvider())
             {
-                var kvStore = provider.GetRequiredService<IStringKeyValueStore>();
+                var store = provider.GetRequiredService<IStringKeyValueStore>();
 
                 const BindingFlags BindFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
                 var properties = typeof(AppSettings).GetProperties(BindFlags);
@@ -57,9 +45,19 @@
 
                 foreach (var prop in properties)
                 {
-                    prop.SetValue(AppSettings.Current, kvStore.Get(prop.Name));
+                    prop.SetValue(AppSettings.Current, store.Get(prop.Name));
                 }
             }
         }
+
+        public static AppSettings Current { get; private set; }
+
+        public static IConfiguration Configuration { get; private set; }
+
+        public string KafkaBrokers { get; set; }
+
+        public string CassandraContactPoints { get; set; }
+
+        public string CassandraKeyspace { get; set; }
     }
 }

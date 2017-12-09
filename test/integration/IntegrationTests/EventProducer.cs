@@ -1,18 +1,21 @@
 ﻿namespace IntegrationTests
 {
+    using System;
     using PetProjects.Framework.Kafka.Configurations.Producer;
     using PetProjects.Framework.Kafka.Producer;
     using PetProjects.MicroTransactions.Events.Transactions.V1;
 
     internal static class EventProducer
     {
-        public static IProducer<TransactionEvent> Producer { get; } = BuildProducer();
+        private static readonly Lazy<IProducer<TransactionEvent>> LazyProducer = BuildProducer();
 
-        private static IProducer<TransactionEvent> BuildProducer()
+        public static IProducer<TransactionEvent> Producer => LazyProducer.Value;
+
+        private static Lazy<IProducer<TransactionEvent>> BuildProducer()
         {
-            return new Producer<TransactionEvent>(
+            return new Lazy<IProducer<TransactionEvent>>(() => new Producer<TransactionEvent>(
                 new TransactionEventsTopic(),
-                new ProducerConfiguration("mts-updater-integrationtests", AppSettings.Current.KafkaBrokers));
+                new ProducerConfiguration("mts-updater-integrationtests", AppSettings.Current.KafkaBrokers)));
         }
     }
 }
