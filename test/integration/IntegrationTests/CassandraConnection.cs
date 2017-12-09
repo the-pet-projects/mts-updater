@@ -14,7 +14,7 @@
             return new Lazy<ISession>(() =>
             {
                 var cluster = Cluster.Builder()
-                    .AddContactPoints(AppSettings.Current.CassandraContactPoints)
+                    .AddContactPoints(AppSettings.Current.CassandraContactPoints.Split(','))
                     .WithDefaultKeyspace(AppSettings.Current.CassandraKeyspace)
                     .Build();
 
