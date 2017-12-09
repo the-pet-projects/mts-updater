@@ -24,7 +24,7 @@
     <PackageReference Include="MSTest.TestAdapter" Version="1.1.18" />
     <PackageReference Include="MSTest.TestFramework" Version="1.1.18" />
     <PackageReference Include="PetProjects.Framework.Consul" Version="0.9.17330.3" />
-    <PackageReference Include="PetProjects.Framework.Kafka" Version="0.1.17342.1" />
+    <PackageReference Include="PetProjects.Framework.Kafka" Version="0.1.17343.2-beta" />
     <PackageReference Include="PetProjects.MicroTransactions.Events" Version="0.1.17338.3" />
   </ItemGroup>
 

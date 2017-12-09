@@ -87,7 +87,7 @@
             var logLevel = configStore.GetAndConvertValue<LogEventLevel>("Logging/LogLevel");
             var logType = configStore.GetAndConvertValue<string>("Logging/LogType");
 
-            serviceCollection.AddLogging(builder => builder.AddPetProjectLogging(logLevel, sinkConfig, kafkaConfig, logType, true));
+            serviceCollection.AddLogging(builder => builder.AddPetProjectLogging(logLevel, sinkConfig, kafkaConfig, logType, true).AddConsole());
             serviceCollection.TryAddSingleton<ILogger>(sp => sp.GetRequiredService<ILoggerFactory>().CreateLogger("No category"));
         }
 
@@ -97,22 +97,30 @@
 
             logger.LogCritical("Starting MicroTransactionsUpdater...");
 
-            using (var consumer = scopedProvider.GetRequiredService<IConsumer<TransactionEvent>>())
+            try
             {
-                var task = Task.Factory.StartNew(() => consumer.StartConsuming(), TaskCreationOptions.LongRunning);
 
-                Console.CancelKeyPress += (sender, eArgs) =>
+                using (var consumer = scopedProvider.GetRequiredService<IConsumer<TransactionEvent>>())
                 {
-                    Program.QuitEvent.Set();
-                    eArgs.Cancel = true;
-                };
+                    using (var task = Task.Factory.StartNew(() => consumer.StartConsuming(), TaskCreationOptions.LongRunning))
+                    {
+                        Console.CancelKeyPress += (sender, eArgs) =>
+                        {
+                            Program.QuitEvent.Set();
+                            eArgs.Cancel = true;
+                        };
 
-                Program.QuitEvent.WaitOne();
+                        Program.QuitEvent.WaitOne();
 
-                logger.LogWarning("Received signal to exit. Stopping and disposing consumer...");
+                        logger.LogWarning("Received signal to exit. Stopping and disposing consumer...");
 
-                consumer.Dispose(); // TODO
-                task.Wait();
+                        task.Wait();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogCritical(ex, "Fatal Exception occured.");
             }
 
             logger.LogCritical("Stopping MicroTransactionsUpdater...");
