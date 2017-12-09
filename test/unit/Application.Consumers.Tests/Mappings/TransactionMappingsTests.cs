@@ -12,7 +12,13 @@
 
         public TransactionMappingsTests()
         {
-            this.target = new TransactionCreated(Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow);
+            this.target = new TransactionCreated
+            {
+                ItemId = Guid.NewGuid(),
+                Quantity = 1,
+                TransactionId = Guid.NewGuid(),
+                UserId = Guid.NewGuid()
+            };
         }
 
         [TestMethod]
@@ -26,6 +32,8 @@
             Assert.AreEqual(this.target.TransactionId, act.Id);
             Assert.AreEqual(this.target.Timestamp.UnixTimeEpochTimestamp, act.EpochTimestamp);
             Assert.AreEqual(this.target.UserId, act.UserId);
+            Assert.AreEqual(this.target.Quantity, act.Quantity);
+            Assert.AreEqual(this.target.ItemId, act.ItemId);
         }
     }
 }

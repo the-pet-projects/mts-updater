@@ -11,7 +11,9 @@
             {
                 Id = transaction.TransactionId,
                 UserId = transaction.UserId,
-                EpochTimestamp = transaction.Timestamp.UnixTimeEpochTimestamp
+                EpochTimestamp = transaction.Timestamp.UnixTimeEpochTimestamp,
+                ItemId = transaction.ItemId,
+                Quantity = transaction.Quantity
             };
         }
     }

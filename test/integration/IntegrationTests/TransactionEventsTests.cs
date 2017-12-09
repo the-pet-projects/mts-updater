@@ -14,7 +14,13 @@ namespace IntegrationTests
         public async Task ProduceTransactionCreated_ValidEvent_SelectFromReadModelReturnsTransaction()
         {
             // Arrange
-            var transaction = new TransactionCreated(Utils.GenerateTransactionId(), Guid.NewGuid());
+            var transaction = new TransactionCreated
+            {
+                TransactionId = Utils.GenerateTransactionId(),
+                ItemId = Guid.NewGuid(),
+                UserId = Guid.NewGuid(),
+                Quantity = 1
+            };
 
             // Act
             await EventProducer.Producer.ProduceAsync(transaction).ConfigureAwait(false);
@@ -29,13 +35,12 @@ namespace IntegrationTests
                 Assert.IsNotNull(row);
                 return row;
             });
-
-            var transactionId = result.GetValue<Guid>("transaction_id");
-            var userId = result.GetValue<Guid>("user_id");
-            var timestamp = result.GetValue<long>("timestamp");
-            Assert.AreEqual(transaction.TransactionId, transactionId);
-            Assert.AreEqual(transaction.Timestamp.UnixTimeEpochTimestamp, timestamp);
-            Assert.AreEqual(transaction.UserId, userId);
+            
+            Assert.AreEqual(transaction.TransactionId, result.GetValue<Guid>("transaction_id"));
+            Assert.AreEqual(transaction.Timestamp.UnixTimeEpochTimestamp, result.GetValue<long>("timestamp"));
+            Assert.AreEqual(transaction.UserId, result.GetValue<Guid>("user_id"));
+            Assert.AreEqual(transaction.Quantity, result.GetValue<int>("quantity"));
+            Assert.AreEqual(transaction.ItemId, result.GetValue<Guid>("item_id"));
         }
     }
 }

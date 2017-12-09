@@ -9,5 +9,9 @@
         public Guid UserId { get; set; }
 
         public long EpochTimestamp { get; set; }
+
+        public int Quantity { get; set; }
+
+        public Guid ItemId { get; set; }
     }
 }
