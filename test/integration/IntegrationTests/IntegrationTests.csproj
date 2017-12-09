@@ -18,4 +18,10 @@
     <PackageReference Include="PetProjects.MicroTransactions.Events" Version="0.1.17338.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
