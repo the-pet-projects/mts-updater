@@ -29,7 +29,13 @@ namespace PetProjects.MicroTransactionsUpdater.Application.Consumers.Tests.Trans
         public void Handle_ValidEvent_CallsAddAsync()
         {
             // Arrange
-            var transactionEvent = new TransactionCreated(Guid.Empty, Guid.Empty, DateTime.UtcNow);
+            var transactionEvent = new TransactionCreated
+            {
+                ItemId = Guid.Empty,
+                TransactionId = Guid.Empty,
+                UserId = Guid.Empty,
+                Quantity = 1
+            };
 
             // Act
             this.target.Handle(transactionEvent);
