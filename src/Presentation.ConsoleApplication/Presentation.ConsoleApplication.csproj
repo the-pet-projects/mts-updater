@@ -13,7 +13,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.0.0" />
     <PackageReference Include="PetProjects.Framework.Consul" Version="0.9.17330.3" />
-    <PackageReference Include="PetProjects.Framework.Logging.Producer" Version="0.9.17335.1" />
+    <PackageReference Include="PetProjects.Framework.Logging.Producer" Version="0.9.17343.2" />
   </ItemGroup>
   
   <ItemGroup>
