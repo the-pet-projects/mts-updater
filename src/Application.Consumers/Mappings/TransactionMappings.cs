@@ -5,7 +5,7 @@
 
     public static class TransactionMappings
     {
-        public static Transaction ToDomainModel(this TransactionCreated transaction)
+        public static Transaction ToDomainModel(this TransactionCreatedEvent transaction)
         {
             return new Transaction
             {

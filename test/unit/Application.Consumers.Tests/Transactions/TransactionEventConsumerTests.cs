@@ -29,7 +29,7 @@ namespace PetProjects.MicroTransactionsUpdater.Application.Consumers.Tests.Trans
         public void Handle_ValidEvent_CallsAddAsync()
         {
             // Arrange
-            var transactionEvent = new TransactionCreated
+            var transactionEvent = new TransactionCreatedEvent
             {
                 ItemId = Guid.Empty,
                 TransactionId = Guid.Empty,

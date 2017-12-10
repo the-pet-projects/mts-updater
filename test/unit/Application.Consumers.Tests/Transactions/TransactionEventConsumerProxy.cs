@@ -9,11 +9,11 @@
 
     public class TransactionEventConsumerProxy : TransactionEventConsumer
     {
-        public TransactionEventConsumerProxy(IConsumerConfiguration configuration, ILogger<TransactionEventConsumerProxy> logger, ITransactionsRepository repo) : base(configuration, logger, repo)
+        public TransactionEventConsumerProxy(IConsumerConfiguration configuration, ILogger<TransactionEventConsumerProxy> logger, ITransactionsRepository repo) : base(new Infrastructure.CrossCutting.EnvironmentContext { Environment = "test" }, configuration, logger, repo)
         {
         }
 
-        public void Handle(TransactionCreated ev)
+        public void Handle(TransactionCreatedEvent ev)
         {
             this.CallHandler(new MessageWrapper { Message = ev, MessageType = ev.GetType().AssemblyQualifiedName });
         }

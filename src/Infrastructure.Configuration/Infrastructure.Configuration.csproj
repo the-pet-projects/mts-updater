@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Application.Consumers\Application.Consumers.csproj" />
     <ProjectReference Include="..\Data.Repositories\Data.Repositories.csproj" />
+    <ProjectReference Include="..\Infrastructure.CrossCutting\Infrastructure.CrossCutting.csproj" />
   </ItemGroup>
 
 </Project>

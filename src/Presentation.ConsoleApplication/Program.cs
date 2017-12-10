@@ -99,23 +99,19 @@
 
             try
             {
-
-                using (var consumer = scopedProvider.GetRequiredService<IConsumer<TransactionEvent>>())
+                using (var consumer = scopedProvider.GetRequiredService<IConsumer<TransactionEventV1>>())
                 {
-                    using (var task = Task.Factory.StartNew(() => consumer.StartConsuming(), TaskCreationOptions.LongRunning))
+                    consumer.StartConsuming();
+
+                    Console.CancelKeyPress += (sender, eArgs) =>
                     {
-                        Console.CancelKeyPress += (sender, eArgs) =>
-                        {
-                            Program.QuitEvent.Set();
-                            eArgs.Cancel = true;
-                        };
+                        Program.QuitEvent.Set();
+                        eArgs.Cancel = true;
+                    };
 
-                        Program.QuitEvent.WaitOne();
+                    Program.QuitEvent.WaitOne();
 
-                        logger.LogWarning("Received signal to exit. Stopping and disposing consumer...");
-
-                        task.Wait();
-                    }
+                    logger.LogWarning("Received signal to exit. Stopping and disposing consumer...");
                 }
             }
             catch (Exception ex)

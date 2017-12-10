@@ -7,14 +7,14 @@
 
     internal static class EventProducer
     {
-        private static readonly Lazy<IProducer<TransactionEvent>> LazyProducer = BuildProducer();
+        private static readonly Lazy<IProducer<TransactionEventV1>> LazyProducer = BuildProducer();
 
-        public static IProducer<TransactionEvent> Producer => LazyProducer.Value;
+        public static IProducer<TransactionEventV1> Producer => LazyProducer.Value;
 
-        private static Lazy<IProducer<TransactionEvent>> BuildProducer()
+        private static Lazy<IProducer<TransactionEventV1>> BuildProducer()
         {
-            return new Lazy<IProducer<TransactionEvent>>(() => new Producer<TransactionEvent>(
-                new TransactionEventsTopic(),
+            return new Lazy<IProducer<TransactionEventV1>>(() => new Producer<TransactionEventV1>(
+                new TransactionEventsTopicV1(AppSettings.Current.KafkaTopicEnvironment),
                 new ProducerConfiguration("mts-updater-integrationtests", AppSettings.Current.KafkaBrokers)));
         }
     }

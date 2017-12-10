@@ -8,11 +8,11 @@
     [TestClass]
     public class TransactionMappingsTests
     {
-        private readonly TransactionCreated target;
+        private readonly TransactionCreatedEvent target;
 
         public TransactionMappingsTests()
         {
-            this.target = new TransactionCreated
+            this.target = new TransactionCreatedEvent
             {
                 ItemId = Guid.NewGuid(),
                 Quantity = 1,

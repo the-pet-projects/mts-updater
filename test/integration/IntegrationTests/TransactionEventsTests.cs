@@ -14,7 +14,7 @@ namespace IntegrationTests
         public async Task ProduceTransactionCreated_ValidEvent_SelectFromReadModelReturnsTransaction()
         {
             // Arrange
-            var transaction = new TransactionCreated
+            var transaction = new TransactionCreatedEvent
             {
                 TransactionId = Utils.GenerateTransactionId(),
                 ItemId = Guid.NewGuid(),

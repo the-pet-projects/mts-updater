@@ -11,11 +11,21 @@
     using PetProjects.MicroTransactions.Events.Transactions.V1;
     using PetProjects.MicroTransactionsUpdater.Application.Consumers.Transactions;
     using PetProjects.MicroTransactionsUpdater.Data.Repositories;
+    using PetProjects.MicroTransactionsUpdater.Infrastructure.CrossCutting;
 
     public static class DependencyInjectionExtensions
     {
         public static IServiceCollection SetupDependencies(this IServiceCollection services)
         {
+            services.AddSingleton<EnvironmentContext>(sp =>
+            {
+                var store = sp.GetRequiredService<IStringKeyValueStore>();
+                return new EnvironmentContext
+                {
+                    Environment = store.GetAndConvertValue<string>("ApplicationKafkaConfiguration/Environment")
+                };
+            });
+
             services.AddTransient<CassandraSettings>(sp =>
             {
                 var store = sp.GetRequiredService<IStringKeyValueStore>();
@@ -47,7 +57,7 @@
 
             services.AddSingleton<IConnection>(sp => ConnectionBuilder.BuildConnection(sp.GetRequiredService<CassandraConfiguration>()));
             services.AddTransient<ITransactionsRepository, TransactionsRepository>();
-            services.AddTransient<IConsumer<TransactionEvent>, TransactionEventConsumer>();
+            services.AddTransient<IConsumer<TransactionEventV1>, TransactionEventConsumer>();
 
             return services;
         }

@@ -56,6 +56,8 @@
 
         public string KafkaBrokers { get; set; }
 
+        public string KafkaTopicEnvironment { get; set; }
+
         public string CassandraContactPoints { get; set; }
 
         public string CassandraKeyspace { get; set; }
