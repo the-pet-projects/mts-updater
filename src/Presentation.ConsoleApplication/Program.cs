@@ -8,7 +8,6 @@
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.DependencyInjection.Extensions;
     using Microsoft.Extensions.Logging;
-    using Microsoft.Extensions.Logging.Abstractions;
     using PetProjects.Framework.Consul;
     using PetProjects.Framework.Consul.Store;
     using PetProjects.Framework.Kafka.Consumer;
@@ -35,7 +34,10 @@
             // Do the actual work here
             using (var parentServiceProvider = serviceCollection.BuildServiceProvider())
             {
-                Program.Run(parentServiceProvider);
+                using (var scopedProvider = parentServiceProvider.CreateScope())
+                {
+                    Program.Run(scopedProvider.ServiceProvider);
+                }
             }
         }
 
@@ -43,11 +45,15 @@
         {
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddPetProjectConsulServices(Program.Configuration, true);
-            serviceCollection.AddSingleton<ILogger>(NullLogger.Instance);
+            serviceCollection.AddLogging(builder => builder.AddConsole());
+            serviceCollection.TryAddSingleton<ILogger>(sp => sp.GetRequiredService<ILoggerFactory>().CreateLogger("No category"));
 
             using (var tempProvider = serviceCollection.BuildServiceProvider())
             {
-                return tempProvider.GetRequiredService<IStringKeyValueStore>();
+                using (var scopedProvider = tempProvider.CreateScope())
+                {
+                    return scopedProvider.ServiceProvider.GetRequiredService<IStringKeyValueStore>();
+                }
             }
         }
 
